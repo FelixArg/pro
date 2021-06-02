@@ -1,0 +1,70 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <!-- CSS only -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta3/dist/css/bootstrap.min.css"
+          rel="stylesheet"
+          integrity="sha384-eOJMYsd53ii+scO/bJGFsiCZc+5NDVN2yr8+0RDqr0Ql0h+rP48ckxlpbzKgwra6"
+          crossorigin="anonymous">
+    <!-- JavaScript Bundle with Popper -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta3/dist/js/bootstrap.bundle.min.js"
+            integrity="sha384-JEW9xMcG8R+pH31jmWH6WWP0WintQrMb4s7ZOdauHnUtxwoG2vI5DkLtS3qm9Ekf"
+            crossorigin="anonymous"></script>
+    <title>{{title}}</title>
+</head>
+<body>
+<header class="p-3 bg-dark text-white mx-auto">
+    <div class="mx-5">
+        <div class="d-flex flex-wrap navbar navbar-dark bg-dark sticky-top py-0 my-0 align-items-center">
+            <ul class="nav col-12 col-lg-auto me-lg-auto justify-content-center mb-md-0 py-0">
+                <li><a class="navbar-brand fs-2 fw-bold me-5" href="/">CyberNews</a></li>
+                <li><a href="{{ url_for('communities') }}" class="nav-link text-white fs-4">Сообщества</a></li>
+                <li><a href="{{ url_for('news') }}" class="nav-link text-white fs-4">Новости</a></li>
+                <li><a href="{{ url_for('users') }}" class="nav-link text-white fs-4">Пользователи</a></li>
+                <li><a href="{{ url_for('computer_calculator') }}" class="nav-link text-white fs-4">Калькулятор FPS</a> </li>
+                <li><form class="py-2 d-flex px-2 mx-2" action="{{ url_for('search') }}">
+                    <input type="search" class="form-control form-control-dark" name="text" placeholder="Поиск">
+                    <button class="btn btn-outline-secondary mx-2" type="submit">Search</button>
+                </form></li>
+            </ul>
+            {% if current_user.is_authenticated %}
+            <div class=""><img src="{{ url_for('user_avatar', id=current_user.id) }}" class="rounded-circle img-thumbnail" style="object-fit: cover;
+     		width:60px; height: 60px"></div>
+                <div class="dropdown">
+                    <a class="nav-link dropdown-toggle fs-3 pe-5" href="#" id="navbarDarkDropdownMenuLink" data-bs-toggle="dropdown" aria-expanded="false" style="color: #ced4da">
+                        {{ current_user.name }}
+                    </a>
+                    <ul class="dropdown-menu dropdown-menu-dark" aria-labelledby="navbarDarkDropdownMenuLink">
+                        <li><a class="dropdown-item" href="{{ url_for('my_news') }}">Мои статьи</a></li>
+                        <li><a class="dropdown-item" href="{{ url_for('my_communities') }}">Мои сообщества</a></li>
+                        <li><a class="dropdown-item" href="{{ url_for('my_profile') }}">Профиль</a></li>
+                        <li><a class="dropdown-item" href="{{ url_for('subscribes') }}">Подписки</a></li>
+                        <li><hr class="dropdown-divider"></li>
+                        <li><a class="dropdown-item" href="{{ url_for('logout') }}">Выйти</a></li>
+                    </ul>
+                </div>
+            {% else %}
+                <p class="m-2 px-5">
+                    <a class="btn btn btn-warning me-2" href="{{ url_for('register') }}" role="button">Зарегистрироваться</a>
+                    <a class="btn btn-outline-light ml-2" href="{{ url_for('login') }}" role="button">Войти</a>
+                </p>
+            {% endif %}
+        </div>
+    </div>
+</header>
+
+
+<!-- Begin page content -->
+{% for msg in get_flashed_messages() %}
+<div class="alert alert-danger" role="alert" aria-expanded="false">
+    {{ msg }}
+</div>
+{% endfor %}
+<main role="main" class="container mt-5">
+    {% block content %}
+    {% endblock %}
+</main>
+</body>
+</html>
